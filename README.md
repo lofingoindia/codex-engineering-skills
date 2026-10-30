@@ -4,7 +4,7 @@ A collection of 17 reusable [Agent Skills](https://agentskills.io/specification)
 
 The guiding approach is to inspect the actual project, research consequential uncertainties, preserve suitable existing systems, choose the simplest sound change, and verify observable behavior. These skills support engineering judgment; they do not guarantee security, correctness, or production readiness.
 
-**Navigate:** [Catalog](#skill-catalog) · [Install](#installation) · [Use](#using-the-skills) · [Validate](#validation) · [Contribute](CONTRIBUTING.md) · [Inventory](docs/inventory.md)
+**Navigate:** [Catalog](#skill-catalog) · [Install](#installation) · [Use](#using-the-skills) · [Validate](#validation) · [Contribute](CONTRIBUTING.md) · [Inventory](docs/inventory.md) · [Complete work report](docs/work-completion-report.md)
 
 ## Skill catalog
 
