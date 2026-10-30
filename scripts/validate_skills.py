@@ -13,6 +13,7 @@ import json
 import os
 from pathlib import Path
 import re
+import stat
 import subprocess
 import sys
 from urllib.parse import unquote, urlsplit
@@ -35,9 +36,26 @@ def find_creator(explicit: Path | None = None) -> Path:
 
 
 def skill_paths(arguments: list[str]) -> list[Path]:
-    paths = [Path(item).resolve() for item in arguments] if arguments else sorted((ROOT / "skills").iterdir())
+    paths = []
+    for item in arguments:
+        # Bare names always belong to this collection. Use ./name for a local folder.
+        if re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", item):
+            path = ROOT / "skills" / item
+            if not path.is_dir():
+                raise ValueError(f"Unknown repository skill '{item}'; use a name from skills/ or an explicit directory path (./name or an absolute path)")
+        else:
+            path = Path(item)
+        paths.append(path)
+    if not arguments:
+        paths = sorted(path for path in (ROOT / "skills").iterdir() if path.is_dir())
     if not paths:
         raise ValueError("No skills selected")
+    for path in paths:
+        if path.is_symlink() or (path.exists() and getattr(path.lstat(), "st_reparse_tag", None) == getattr(stat, "IO_REPARSE_TAG_MOUNT_POINT", -1)):
+            raise ValueError(f"Skill directory must be materialized, not a symlink or junction: {path.name}")
+        if not path.is_dir() or not (path / "SKILL.md").is_file():
+            raise ValueError(f"Skill directory or SKILL.md not found: {path}")
+    paths = [path.resolve() for path in paths]
     if len(set(paths)) != len(paths):
         raise ValueError("The same skill was selected more than once")
     return paths
@@ -97,10 +115,14 @@ def resource_error(root: Path, source: Path, target: str) -> str | None:
 
 def validate_skill(skill: Path, creator: Path) -> dict:
     errors, warnings, links, files = [], [], [], []
+    if skill.is_symlink() or (skill.exists() and getattr(skill.lstat(), "st_reparse_tag", None) == getattr(stat, "IO_REPARSE_TAG_MOUNT_POINT", -1)):
+        return {"skill": skill.name, "pass": False, "errors": ["Skill directory must be materialized, not a symlink or junction"], "warnings": [], "files": [], "links": []}
     skill = skill.resolve()
     manifest = skill / "SKILL.md"
     if not skill.is_dir() or not manifest.is_file():
         return {"skill": skill.name, "pass": False, "errors": ["Missing skill directory or SKILL.md"], "warnings": [], "files": [], "links": []}
+    if not manifest.resolve().is_relative_to(skill):
+        return {"skill": skill.name, "pass": False, "errors": ["SKILL.md: resource escapes the skill package"], "warnings": [], "files": [], "links": []}
     result = subprocess.run(
         [sys.executable, "-X", "utf8", str(creator), str(skill)],
         capture_output=True, text=True, encoding="utf-8", timeout=30,
@@ -120,12 +142,17 @@ def validate_skill(skill: Path, creator: Path) -> dict:
     except (ValueError, yaml.YAMLError, UnicodeError) as exc:
         errors.append("Manifest: " + str(exc))
     for path in sorted(skill.rglob("*")):
+        rel = path.relative_to(skill).as_posix()
         if path.is_symlink():
-            errors.append(f"{path.relative_to(skill).as_posix()}: distribute materialized resources, not symlinks")
+            errors.append(f"{rel}: distribute materialized resources, not symlinks")
+            continue
+        if not path.resolve().is_relative_to(skill):
+            errors.append(f"{rel}: resource escapes the skill package")
             continue
         if not path.is_file():
             continue
-        rel = path.relative_to(skill).as_posix()
+        if "\\" in rel or ":" in rel or any(ord(character) < 32 for character in rel):
+            errors.append(f"{rel}: use portable package paths without backslashes, colons or control characters")
         data = path.read_bytes()
         files.append({"path": rel, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
         if path.suffix in (".md", ".yaml", ".yml", ".py"):
@@ -150,7 +177,7 @@ def validate_skill(skill: Path, creator: Path) -> dict:
         elif path.suffix in (".sh", ".js", ".mjs", ".cjs", ".ps1", ".ts"):
             warnings.append(f"{rel}: syntax/execution requires its own documented native check")
     ui_file = skill / "agents/openai.yaml"
-    if ui_file.exists():
+    if ui_file.exists() and ui_file.resolve().is_relative_to(skill):
         try:
             ui = yaml.safe_load(ui_file.read_text(encoding="utf-8"))
             if not isinstance(ui, dict):
@@ -183,13 +210,16 @@ def validate_skill(skill: Path, creator: Path) -> dict:
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("skills", nargs="*", help="Skill directory paths; defaults to this repository's skills/")
+    parser.add_argument("skills", nargs="*", help="Repository skill names or explicit directory paths; defaults to this repository's skills/")
     parser.add_argument("--creator-validator", type=Path)
     parser.add_argument("--json-output", type=Path, help="Optional local evidence file; do not commit generated output")
     args = parser.parse_args(argv)
     try:
         creator = find_creator(args.creator_validator)
-        results = [validate_skill(path, creator) for path in skill_paths(args.skills)]
+        selected = skill_paths(args.skills)
+        if args.json_output and any(args.json_output.resolve().is_relative_to(skill) for skill in selected):
+            raise ValueError("JSON output must be outside every selected skill")
+        results = [validate_skill(path, creator) for path in selected]
     except (ValueError, OSError, subprocess.TimeoutExpired) as exc:
         parser.exit(2, f"Validation could not complete: {exc}\n")
     for result in results:

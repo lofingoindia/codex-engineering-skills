@@ -1,0 +1,23 @@
+name: Skill improvement
+description: Propose a focused improvement or a skill with distinct responsibility.
+body:
+  - type: input
+    id: scope
+    attributes:
+      label: Existing skill or proposed responsibility
+    validations:
+      required: true
+  - type: textarea
+    id: need
+    attributes:
+      label: Engineering problem and expected outcome
+      description: Explain a real use case and why existing guidance does not cover it.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Relevant sources and verification approach
+      description: Prefer official, version-matched evidence and proportional tests.
+    validations:
+      required: true

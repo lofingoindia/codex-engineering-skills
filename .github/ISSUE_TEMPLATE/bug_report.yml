@@ -1,0 +1,32 @@
+name: Bug report
+description: Report a reproducible skill, installation, or tooling problem.
+body:
+  - type: markdown
+    attributes:
+      value: "For security-sensitive reports, use the private reporting link in SECURITY.md. Redact credentials and private context."
+  - type: input
+    id: revision
+    attributes:
+      label: Affected skill/tool and release or commit
+      placeholder: "go-backend-engineering; commit or release tag"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: "OS, Codex host/version, Skills CLI version if relevant, and Python version for maintainer tooling."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction, expected behavior, and actual behavior
+      description: "Use minimal synthetic inputs and exact commands. Do not upload raw private agent traces."
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted evidence and verification limits
+      description: "Include useful errors and checks actually executed."

@@ -5,7 +5,8 @@ This repository maintains reusable engineering instructions, not application fra
 ## Ownership and structure
 
 - `skills/<name>/` is an independently installable package. Keep `SKILL.md`, `agents/openai.yaml`, references, required assets/scripts, and `LICENSE` inside it. No dependency on another skill's relative files.
-- `scripts/` owns shared validation/packaging; `tests/` owns their regression tests. Reuse these tools before adding helpers.
+- Keep maintained developer tooling in Python. Consumer installation/update uses the existing Skills CLI with the version-specific safeguards in `docs/installing-and-updating.md`; do not build a second installer.
+- `scripts/` owns shared validation/packaging/release identity; `tests/` owns their regression tests. Reuse these tools before adding helpers.
 - `evals/` holds optional evaluation utilities and deliberately defective synthetic fixtures. Do not fix those source fixtures to make checks pass. Evaluate changes in disposable copies.
 - `docs/source-manifest.json` is the original migration snapshot, not a generated current-file inventory. Preserve its historical meaning.
 
@@ -24,9 +25,11 @@ This repository maintains reusable engineering instructions, not application fra
 Set up the external validator and development dependency as described in `CONTRIBUTING.md`, then use:
 
 ```sh
-python scripts/validate_skills.py skills/<changed-skill>
+python scripts/validate_skills.py <changed-skill>
 python -m unittest discover -s tests -v
 ```
+
+Use `scripts/release_manifest.py` for committed per-skill identity and exact collection ZIP verification. Explicit Git `vMAJOR.MINOR.PATCH` tags are the collection version authority; never rewrite published tags or regenerate the historical migration snapshot.
 
 Run full collection validation for cross-cutting changes and before publication. Package changed skills into a fresh ignored output directory when resource discovery or packaging changes. Test executable scripts using their native tools when applicable; Python AST validation alone does not prove execution correctness.
 
@@ -40,4 +43,5 @@ Announce substantial tasks before starting. For formal multi-task work, report f
 - Never commit `.tools/`, `.runs/`, `dist/`, environments, caches, credentials, private application data, or conversation transcripts. Check new fixture data is synthetic.
 - Imported `skills/**` and `evals/fixtures/**` retain their original bytes through Git attributes. Avoid mass line-ending or formatting changes. Review executable file modes for any new scripts.
 - Update the README catalog and contribution instructions when capabilities or commands change. Keep evidence dated and bounded; do not invent badges or evaluation results.
+- Submit source changes through a feature branch and PR; do not bypass rules. Require CI contexts only after actual successful runs. Follow `SECURITY.md`, `docs/governance.md`, and `docs/releases.md` for repository security and publication.
 - Source maintenance does not authorize overwriting globally installed skills, changing repository visibility, or modifying unrelated projects.
