@@ -1,5 +1,7 @@
 # Migration verification
 
+> Historical consolidation evidence. For the subsequent public distribution/tooling evolution, see [current distribution verification](distribution-verification.md).
+
 Date: **2026-10-30**. This record describes executed migration checks, not a certification of all engineering guidance or future agent behavior.
 
 ## Preservation

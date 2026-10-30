@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Privately report a security vulnerability
+    url: https://github.com/lofingoindia/codex-engineering-skills/security/advisories/new
+    about: Do not disclose credentials or sensitive exploit details in a public issue.

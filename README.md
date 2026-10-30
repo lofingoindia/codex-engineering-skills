@@ -4,7 +4,7 @@ A collection of 17 reusable [Agent Skills](https://agentskills.io/specification)
 
 The guiding approach is to inspect the actual project, research consequential uncertainties, preserve suitable existing systems, choose the simplest sound change, and verify observable behavior. These skills support engineering judgment; they do not guarantee security, correctness, or production readiness.
 
-**Navigate:** [Catalog](#skill-catalog) · [Install](#installation) · [Use](#using-the-skills) · [Validate](#validation) · [Contribute](CONTRIBUTING.md) · [Inventory](docs/inventory.md) · [Complete work report](docs/work-completion-report.md)
+**Navigate:** [Catalog](#skill-catalog) · [Install](#installation) · [Use](#using-the-skills) · [Validate](#validation) · [Contribute](CONTRIBUTING.md) · [Inventory](docs/inventory.md) · [Releases](docs/releases.md) · [Governance](docs/governance.md) · [Evidence](docs/distribution-verification.md) · [Historical work report](docs/work-completion-report.md)
 
 ## Skill catalog
 
@@ -32,43 +32,31 @@ Every directory below is independently installable and includes its own `SKILL.m
 
 ## Installation
 
-### Install an individual skill
+Consumers need **Node.js 22.20+ and npm/npx** for the tested Skills CLI. Python is only for maintainers. This repository is public; skill installation needs no GitHub account or token.
 
-In Codex, ask the built-in installer:
+Browse the collection without installing:
 
-```text
-Use $skill-installer to install the skill at
-https://github.com/lofingoindia/codex-engineering-skills/tree/main/skills/go-backend-engineering
+```sh
+npx --yes skills@1.7.4 add lofingoindia/codex-engineering-skills --list
 ```
 
-Replace the last directory with a catalog entry. While this repository is private, your GitHub account and Git credentials must have access. Use the installer's supported authentication; never paste credentials into prompts or commit them. To reproduce a particular version, use a commit SHA in place of `main`.
+For a **fresh** global Codex installation, install one skill or the complete collection:
 
-The installer supplied with the migration environment installs to `$CODEX_HOME/skills` (normally `~/.codex/skills`) and refuses an existing destination. [Current Codex documentation](https://learn.chatgpt.com/docs/build-skills) describes user skills in `~/.agents/skills` and repository skills in `.agents/skills`. Discovery paths depend on the installed Codex/installer version. Check your host's instructions and installation result; avoid installing duplicate copies of the same name into both user directories. The migration preserved the working global installations in their original directory.
-
-### Install the collection manually
-
-Clone the repository, then copy each desired **complete skill directory**, including its `LICENSE`, into your host's supported user skills directory. There is no runtime dependency on this repository or its sibling skills.
-
-This PowerShell example uses the current documented user directory and checks **all** name conflicts before copying anything:
-
-```powershell
-git clone https://github.com/lofingoindia/codex-engineering-skills.git
-Set-Location codex-engineering-skills
-$skillDestination = Join-Path $HOME '.agents/skills' # Adjust for your Codex host.
-$sourceSkills = @(Get-ChildItem -LiteralPath ./skills -Directory)
-$conflicts = @($sourceSkills | Where-Object {
-    Test-Path -LiteralPath (Join-Path $skillDestination $_.Name)
-})
-if ($conflicts.Count) { throw "Existing skills: $($conflicts.Name -join ', ')" }
-New-Item -ItemType Directory -Path $skillDestination -Force | Out-Null
-foreach ($skill in $sourceSkills) {
-    Copy-Item -LiteralPath $skill.FullName -Destination $skillDestination -Recurse -ErrorAction Stop
-}
+```sh
+npx --yes skills@1.7.4 add lofingoindia/codex-engineering-skills --skill redis-production-engineering -a codex -g --copy --yes
+npx --yes skills@1.7.4 add lofingoindia/codex-engineering-skills --skill '*' -a codex -g --copy --yes
+npx --yes skills@1.7.4 list -g -a codex
 ```
 
-On macOS/Linux, the equivalent operation is to copy complete selected folders to the supported user directory after checking for collisions. For repository-local installation, copy selected folders to `.agents/skills/` in that project instead. Check whether those copies should be committed with that project's maintainers.
+> **Existing installations need backup and review first.** Skills CLI 1.7.4 can replace manual or modified same-name folders. Its `check` command is mutating, and unsupported `--dry-run`/`--check` flags do not make it read-only. Do not run it as a harmless update probe.
 
-Use a new Codex turn/session to refresh discovery as required by your host. Updates are deliberate: review changes, back up local modifications, and replace the selected installation. Pulling this source repository does not update installed copies automatically.
+Read the [installation and update guide](docs/installing-and-updating.md) for selected/multiple/all updates, read-only release comparisons, tracking metadata, Windows copy/link behavior, safe replacement, removal, and recovery. Published CLI behavior was verified against its source and disposable installations; upstream `main` may contain unreleased differences.
+
+For a stable source, select an existing tag from [Releases](https://github.com/lofingoindia/codex-engineering-skills/releases) and use `"lofingoindia/codex-engineering-skills#REF"`. A full commit also works. `@NAME` selects a skill, not a release. Pinned refs remain pinned on update; a new release does not update installed skills automatically. See [versioning and releases](docs/releases.md).
+
+The tested CLI installs global Codex skills into `~/.agents/skills`. Some older Codex installers/manual installations use `~/.codex/skills`; check your host, back up local changes, and avoid duplicate same-name installations. These commands do not migrate the older directory. For project scope, omit `-g` from a new project-root installation. Refresh discovery as required by the host.
+
+The built-in Codex `$skill-installer` remains an alternative for installing a selected GitHub skill directory. Follow that installed tool's own supported destination and collision behavior; it has separate tracking from the Skills CLI.
 
 ## Using the skills
 
@@ -87,22 +75,23 @@ Load only skills relevant to the task. Specialist implementation skills compleme
 
 ## Validation
 
-Using the skills requires a Codex host that supports Agent Skills. Maintaining this repository additionally requires **Git and Python 3.11+ with pip/venv**, plus the pinned development dependency in `requirements-dev.txt`. CI uses Python 3.13 on Windows and Ubuntu. Project-specific frameworks are needed only when working on the relevant application, not to validate this collection.
+Using the skills requires a Codex host that supports Agent Skills. The installation path above additionally uses Node/npm; the Markdown skills themselves have no Python runtime dependency. Maintaining this repository requires **Git and Python 3.11+ with pip/venv**, plus the pinned development dependency in `requirements-dev.txt`. The configured CI matrix uses Python 3.13 on Windows, Ubuntu, and macOS; actual execution evidence is recorded separately. Project-specific frameworks are needed only when working on the relevant application, not to validate this collection.
 
 After the [development setup](CONTRIBUTING.md#development-setup):
 
 ```sh
 python scripts/validate_skills.py
 python -m unittest discover -s tests -v
-python scripts/package_skills.py
+python scripts/package_skills.py --output-dir dist/review-1
+python scripts/release_manifest.py --ref HEAD --package-dir dist/review-1 --json-output .runs/release-manifest.json
 ```
 
 Validation reuses OpenAI's external skill-creator validator, then checks names, local Markdown resource paths, case portability, optional UI metadata, unfinished scaffolds, and bundled Python syntax. Packaging validates first, verifies ZIP contents against source bytes, and refuses to overwrite existing archives. `dist/` is ignored; use a fresh `--output-dir` for another packaging run.
 
-To validate one repository or installed copy, pass its directory:
+To validate one repository skill, pass its name or directory; use an explicit path for installed copies:
 
 ```sh
-python scripts/validate_skills.py skills/go-backend-engineering
+python scripts/validate_skills.py go-backend-engineering
 python scripts/validate_skills.py /path/to/user-skills/go-backend-engineering
 ```
 
@@ -115,10 +104,11 @@ skills/             Self-contained installable skills
 scripts/            Validation and packaging entry points
 tests/              Focused tooling regression tests
 evals/              Optional cases, synthetic fixtures, and runner
-docs/               Migration inventory, source hashes, verification record
-.github/workflows/  Windows/Linux validation
+docs/               Installation, releases, governance, and dated evidence
+.github/            CI, dependency updates, issue forms, and PR template
 AGENTS.md           Instructions for agents maintaining this collection
 CONTRIBUTING.md     Setup, development, validation, and review workflow
+SECURITY.md         Private reporting and security maintenance policy
 ```
 
 ## Maintenance and feedback

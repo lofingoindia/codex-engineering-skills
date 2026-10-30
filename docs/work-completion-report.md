@@ -1,5 +1,7 @@
 # Codex Engineering Skills: Complete Work Report and Repository Guide
 
+> Historical consolidation evidence. For the subsequent public distribution/tooling evolution, see [current distribution verification](distribution-verification.md).
+
 | Report detail | Value |
 | --- | --- |
 | Prepared | 30 October 2026, Asia/Calcutta |

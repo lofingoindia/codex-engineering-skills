@@ -4,7 +4,7 @@ Skills should help an agent reason better about the existing project. Prefer foc
 
 ## Development setup
 
-Use Git and a standard Python 3.11+ installation with pip/venv. CI uses 3.13. Stripped embedded Python distributions may lack pip/venv or ignore `PYTHONPATH`; install a normal development interpreter for this workflow.
+Use Git and a standard Python 3.11+ installation with pip/venv. The CI matrix uses 3.13 on Windows, Ubuntu, and macOS; check the actual workflow result for executed platforms. Stripped embedded Python distributions may lack pip/venv or ignore `PYTHONPATH`; install a normal development interpreter for this workflow.
 
 ```sh
 python -m venv .venv
@@ -34,15 +34,28 @@ Keep the CI upstream commit deliberate: review changed validation behavior befor
 ## Everyday checks
 
 ```sh
-python scripts/validate_skills.py skills/api-design-engineering
+python scripts/validate_skills.py api-design-engineering
 python scripts/validate_skills.py
 python -m unittest discover -s tests -v
-python scripts/package_skills.py skills/api-design-engineering --output-dir dist/review-1
+python scripts/package_skills.py api-design-engineering --output-dir dist/review-1 --json-output .runs/packages-review-1.json
 ```
 
-Validation exits nonzero for invalid skills or an unavailable validator. An optional `--json-output .runs/validation.json` retains local evidence. Packaging verifies CRC, file inventory, and source bytes, and refuses existing ZIPs. Choose a fresh output directory for another run. Neither tool installs or changes global skills.
+Validation exits nonzero for invalid skills or an unavailable validator. An optional `--json-output .runs/validation.json` retains local evidence. Packaging verifies CRC, file inventory, and source bytes, and refuses existing ZIPs. Choose a fresh output directory for another run. Neither tool installs or changes global skills. Bare names resolve against this repository even from another working directory; use `./name` or an absolute path for an external folder. Validation JSON may be refreshed outside the selected packages. Packaging evidence and release-manifest outputs refuse existing files; choose a fresh evidence filename. The validator and packager reject JSON output inside a selected package. Release-manifest output must be new; keep all generated evidence in ignored output directories.
 
 The local reference check recognizes inline Markdown links/images and reference definitions outside fenced examples. It checks file existence, containment, path case, and optional UI asset paths. It does not check remote URL availability, heading anchors, arbitrary prose paths, or every possible Markdown dialect. Bundled Python is parsed without execution; other script languages require documented native checks. These tools do not measure agent behavior or certify security.
+
+## Source identity and release checks
+
+`python scripts/release_manifest.py --ref HEAD --json-output .runs/source-review-1.json` describes committed skill content without checkout. Add `--previous EXISTING_REF` to identify changed skills. To verify archive/source correspondence, first create a **complete** collection in a separate fresh directory:
+
+```sh
+python scripts/package_skills.py --output-dir dist/collection-review-1
+python scripts/release_manifest.py --ref HEAD --package-dir dist/collection-review-1 --json-output .runs/collection-review-1.json
+```
+
+The one-skill packaging example above has its own built-in integrity checks; it cannot supply a complete-collection manifest. Keep generated files outside skill directories. Read [release policy](docs/releases.md) before creating a tag.
+
+An explicit `vMAJOR.MINOR.PATCH` tag is the collection version authority. No per-skill version counters, duplicate version files, or automatic release on every documentation change are needed. Never rewrite published tags.
 
 ## Adding or updating a skill
 
@@ -65,4 +78,4 @@ Report observed results with the case, skill commit, model/host, conditions, act
 
 Describe the concrete problem and resulting behavior, relevant research, and executed verification. Explain remaining limits honestly. Keep PRs focused, and preserve existing users' invocation names and sound conventions. CI validates on Windows and Ubuntu with read-only repository permissions and pinned dependencies/actions.
 
-Report bugs with reproducible, redacted examples. Keep security-sensitive reports private through an existing maintainer contact. Never include real tokens, customer data, or internal infrastructure in fixtures or issues. Contributions to original collection content are submitted under the repository's MIT license unless clearly agreed otherwise.
+Report bugs with reproducible, redacted examples. Use [private vulnerability reporting](https://github.com/lofingoindia/codex-engineering-skills/security/advisories/new) for sensitive reports; see [SECURITY.md](SECURITY.md). Never include real tokens, customer data, or internal infrastructure in fixtures or issues. Contributions to original collection content are submitted under the repository's MIT license unless clearly agreed otherwise.

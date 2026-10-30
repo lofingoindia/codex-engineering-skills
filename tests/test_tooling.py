@@ -2,6 +2,8 @@
 import importlib.util
 import io
 import json
+import os
+import shutil
 from pathlib import Path
 import socket
 import subprocess
@@ -108,6 +110,148 @@ class SkillChecks(unittest.TestCase):
     def test_duplicate_selection_is_rejected(self):
         with self.assertRaises(ValueError):
             validator.skill_paths([str(self.skill), str(self.skill)])
+
+    def test_repository_name_resolves_from_another_working_directory(self):
+        original = Path.cwd()
+        self.addCleanup(os.chdir, original)
+        os.chdir(self.base)
+        expected = ROOT / "skills/api-design-engineering"
+        self.assertEqual(validator.skill_paths(["api-design-engineering"]), [expected.resolve()])
+        with self.assertRaisesRegex(ValueError, "more than once"):
+            validator.skill_paths(["api-design-engineering", str(expected)])
+        self.assertEqual(validator.skill_paths(["./example-skill"]), [self.skill.resolve()])
+
+    def test_missing_name_and_invalid_directory_have_useful_errors(self):
+        with self.assertRaisesRegex(ValueError, "Unknown repository skill.*explicit directory"):
+            validator.skill_paths(["not-a-real-skill"])
+        with self.assertRaisesRegex(ValueError, "SKILL.md"):
+            validator.skill_paths([str(self.base)])
+        with self.assertRaises(ValueError):
+            validator.skill_paths([".."])
+
+    def test_source_change_after_validation_is_rejected_without_an_archive(self):
+        original = validator.validate_skill
+        def changing_validation(*args):
+            result = original(*args)
+            (self.skill / "LICENSE").write_bytes(b"Changed after validation\n")
+            return result
+        with patch.object(packager, "validate_skill", side_effect=changing_validation):
+            with self.assertRaisesRegex(ValueError, "changed"):
+                packager.package_skill(self.skill, self.base / "dist", self.creator)
+        self.assertFalse((self.base / "dist/example-skill.zip").exists())
+
+    def test_binary_and_hidden_resources_are_packaged_without_changes(self):
+        (self.skill / ".hidden").write_bytes(b"\x00\xff\r\n")
+        (self.skill / "asset.bin").write_bytes(bytes(range(256)))
+        packager.package_skill(self.skill, self.base / "dist", self.creator)
+        with zipfile.ZipFile(self.base / "dist/example-skill.zip") as archive:
+            self.assertEqual(archive.read("example-skill/.hidden"), b"\x00\xff\r\n")
+            self.assertEqual(archive.read("example-skill/asset.bin"), bytes(range(256)))
+
+    def test_packaging_cli_writes_json_and_handles_validator_timeout(self):
+        report = self.base / "report.json"
+        with redirect_stdout(io.StringIO()):
+            self.assertEqual(packager.main([str(self.skill), "--output-dir", str(self.base / "dist"),
+                                            "--json-output", str(report)]), 0)
+        data = json.loads(report.read_text(encoding="utf-8"))
+        self.assertTrue(data["pass"])
+        self.assertEqual(data["skills"][0]["skill"], "example-skill")
+        with patch.object(packager, "validate_skill", side_effect=subprocess.TimeoutExpired("validator", 30)):
+            with self.assertRaises(SystemExit) as raised:
+                packager.main([str(self.skill), "--output-dir", str(self.base / "next")])
+        self.assertEqual(raised.exception.code, 1)
+
+    def test_output_inside_any_selected_skill_is_rejected_before_writing(self):
+        second = self.base / "second-skill"
+        shutil.copytree(self.skill, second)
+        manifest = second / "SKILL.md"
+        manifest.write_text(manifest.read_text(encoding="utf-8").replace("example-skill", "second-skill"), encoding="utf-8")
+        destination = second / "dist"
+        with self.assertRaises(SystemExit):
+            packager.main([str(self.skill), str(second), "--output-dir", str(destination)])
+        self.assertFalse(destination.exists())
+        with self.assertRaises(SystemExit):
+            packager.main([str(self.skill), "--output-dir", str(self.base / "dist"),
+                           "--json-output", str(self.skill / "report.json")])
+        self.assertFalse((self.base / "dist").exists())
+
+    def test_failed_archive_write_removes_only_its_new_archive(self):
+        destination = self.base / "dist"
+        with patch.object(zipfile.ZipFile, "writestr", side_effect=OSError("Synthetic write failure")):
+            with self.assertRaisesRegex(OSError, "Synthetic"):
+                packager.package_skill(self.skill, destination, self.creator)
+        self.assertFalse((destination / "example-skill.zip").exists())
+
+    def test_current_directory_is_an_explicit_skill_path(self):
+        original = Path.cwd()
+        self.addCleanup(os.chdir, original)
+        os.chdir(self.skill)
+        self.assertEqual(validator.skill_paths(["."]), [self.skill.resolve()])
+
+    def test_validation_json_output_cannot_modify_selected_skill_but_external_reports_can_be_reused(self):
+        for output in (self.skill / "SKILL.md", self.skill / "references/details.md", self.skill / "new/report.json"):
+            with self.subTest(output=output):
+                before = output.read_bytes() if output.exists() else None
+                with redirect_stdout(io.StringIO()), self.assertRaises(SystemExit) as raised:
+                    validator.main([str(self.skill), "--json-output", str(output)])
+                self.assertEqual(raised.exception.code, 2)
+                self.assertEqual(output.read_bytes() if output.exists() else None, before)
+        output = self.base / "evidence.json"
+        output.write_text("Old evidence", encoding="utf-8")
+        with redirect_stdout(io.StringIO()):
+            self.assertEqual(validator.main([str(self.skill), "--json-output", str(output)]), 0)
+        self.assertTrue(json.loads(output.read_text(encoding="utf-8"))["pass"])
+
+    def test_resolved_child_escape_is_rejected_before_reading_content(self):
+        linked = self.skill / "escaped.bin"
+        linked.write_bytes(b"Synthetic resource")
+        outside = self.base / "outside.bin"
+        outside.write_bytes(b"Synthetic external resource")
+        original_resolve, original_read = Path.resolve, Path.read_bytes
+        def resolved(path, *args, **kwargs):
+            return outside if path == linked else original_resolve(path, *args, **kwargs)
+        def read(path):
+            if path == linked:
+                self.fail("Read content through an escaped resource")
+            return original_read(path)
+        with patch.object(Path, "resolve", resolved), patch.object(Path, "read_bytes", read):
+            result = self.check()
+            self.assertFalse(result["pass"])
+            self.assertTrue(any("escapes the skill package" in error for error in result["errors"]))
+            self.assertNotIn("escaped.bin", {item["path"] for item in result["files"]})
+            with self.assertRaises(ValueError):
+                packager.package_skill(self.skill, self.base / "dist", self.creator)
+        self.assertFalse((self.base / "dist").exists())
+
+    @unittest.skipUnless(os.name == "nt", "Windows junction regression")
+    def test_windows_junction_resources_and_root_aliases_are_rejected(self):
+        outside = self.base / "outside"
+        outside.mkdir()
+        (outside / "private.bin").write_bytes(b"Synthetic external bytes")
+        script = self.base / "junction.ps1"
+        script.write_text("param([string]$linkPath, [string]$targetPath)\n"
+                          "New-Item -ItemType Junction -Path $linkPath -Target $targetPath -ErrorAction Stop | Out-Null\n",
+                          encoding="utf-8")
+        linked, alias = self.skill / "linked", self.base / "root-alias"
+        for path, target in ((linked, outside), (alias, self.skill)):
+            result = subprocess.run(["powershell.exe", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass",
+                                     "-File", str(script), str(path), str(target)], capture_output=True, text=True, timeout=20)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.addCleanup(path.rmdir)  # Remove only this junction; never recurse into its target.
+        self.assertFalse(linked.is_symlink(), "Exercise a junction rather than the existing symlink check")
+        result = self.check()
+        self.assertFalse(result["pass"])
+        self.assertNotIn("linked/private.bin", {item["path"] for item in result["files"]})
+        with self.assertRaises(ValueError):
+            packager.package_skill(self.skill, self.base / "dist", self.creator)
+        with self.assertRaisesRegex(ValueError, "junction"):
+            validator.skill_paths([str(alias)])
+        with patch.object(validator.subprocess, "run", side_effect=AssertionError("Read a root junction before rejection")):
+            self.assertFalse(validator.validate_skill(alias, self.creator)["pass"])
+            with self.assertRaises(ValueError):
+                packager.package_skill(alias, self.base / "dist", self.creator)
+        self.assertEqual((outside / "private.bin").read_bytes(), b"Synthetic external bytes")
+        self.assertFalse((self.base / "dist").exists())
 
     def test_archive_contains_exact_source_and_notice(self):
         result = packager.package_skill(self.skill, self.base / "dist", self.creator)
