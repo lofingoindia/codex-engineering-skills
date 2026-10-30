@@ -23,6 +23,8 @@ The published CLI dispatches `check` to its update implementation. Actual sandbo
 
 The CLI does not detect/protect installed local edits, retain all copy/agent choices during update, repair every missing tracked directory, or make multi-skill updates atomic. These are documented in [installation and update safeguards](installing-and-updating.md), with backup/candidate comparison and explicit selected-source re-add. Read-only source/release/manifest comparison is available; a safe built-in `skills check` is not claimed for 1.7.4.
 
+The subsequent `v0.1.0` candidate-tag installation copied all 17 packages/150 files correctly and retained the selected ref. The GitHub tree API was unavailable for that acquisition, so the CLI recorded 64-character fallback folder hashes. An initial direct comparison with Git tree SHAs was an invalid oracle; byte comparison still passed. Upstream source established the two formats, and the installation/release guidance was corrected. The immutable candidate tag was preserved; the documentation correction advances the candidate patch version rather than rewriting history.
+
 ## GitHub configuration evidence
 
 Authenticated interface inspection and saved-setting/API readback established:
