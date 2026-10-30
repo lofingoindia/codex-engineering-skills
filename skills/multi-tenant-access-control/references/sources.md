@@ -1,0 +1,17 @@
+# Sources and policy tradeoffs
+
+Research checked **2026-10-30**. Use documentation matching deployed database, policy engine, pooler and SDK versions. This skill's end-to-end decision method is an engineering synthesis, not a mandatory external-service architecture.
+
+- [OWASP authorization guidance](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html): least privilege, default denial and checks on protected operations. Its preference for attribute/relationship modeling should not force a simple existing RBAC application into a new engine.
+- [OWASP API Security](https://owasp.org/www-project-api-security/): published Top 10 2023 object, function and property-level failure categories; useful risk taxonomy rather than exhaustive assurance.
+- [AWS tenant isolation](https://docs.aws.amazon.com/whitepapers/latest/saas-architecture-fundamentals/tenant-isolation.html): authentication and coarse privileges alone do not establish isolation of tenant resources.
+- [AWS SaaS authorization guidance](https://docs.aws.amazon.com/prescriptive-guidance/latest/saas-multitenant-api-access-authorization/introduction.html): distributed enforcement and policy decision patterns. This is an opinionated reference approach; central policy evaluation does not remove caller enforcement or the need to inspect implementation.
+- [Zanzibar publication](https://research.google/pubs/zanzibar-googles-consistent-global-authorization-system/): large-scale relationship authorization and consistency design context, not a requirement to recreate Google's architecture.
+- [OpenFGA consistency modes](https://openfga.dev/docs/interacting/consistency): cached query behavior versus higher-consistency reads; guarantees must be checked separately from business-data transactions.
+- [OPA policy language](https://www.openpolicyagent.org/docs/policy-language): explicit policy decisions over supplied data; enforce caller-side interpretation and verify current policy/data distribution and undefined/error behavior if OPA is used.
+- [PostgreSQL row security](https://www.postgresql.org/docs/current/ddl-rowsecurity.html) and [CREATE POLICY](https://www.postgresql.org/docs/current/sql-createpolicy.html): actual bypass roles, policy combinations, mutation checks, referential-check leakage and other limitations. The consulted current documentation identifies PostgreSQL 18; PostgreSQL 19 is listed as development/RC, not an upgrade requirement.
+- [PgBouncer features](https://www.pgbouncer.org/features.html): transaction pooling does not preserve ordinary session state. Apply context within the correct transaction/connection using the actual driver's supported API.
+
+Normative database/product behavior differs from OWASP/AWS architectural recommendations. Relationship engines, RLS and local application policy can complement one another, but none makes caches, workers or object storage automatically tenant-safe. No policy engine or extra infrastructure is required by this skill.
+
+The installed skill-creator/UI guidance, [Agent Skills specification](https://agentskills.io/specification), [OpenAI skills guide](https://developers.openai.com/api/docs/guides/tools-skills) and [Astra guidance](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra) informed the independent activation boundary and conditional references. [Evaluation guidance](https://developers.openai.com/blog/eval-skills) is methodological; structural checks alone do not demonstrate improved authorization decisions.

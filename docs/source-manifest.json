@@ -1,0 +1,906 @@
+{
+  "snapshot_date": "2026-10-30",
+  "source_root": "user-level Codex skills directory",
+  "skills": [
+    {
+      "name": "api-design-engineering",
+      "source": "user-skills/api-design-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "41a46b88156f36d52044c8ab5f17b9051738fe4f2c8ed8fb9fd984c04e0789f0",
+          "bytes": 124,
+          "executable": false
+        },
+        {
+          "path": "references/contracts.md",
+          "sha256": "a2402f2f8377c8180af7c31fde2609dd28745543791045e98ac0b29e76274e58",
+          "bytes": 8080,
+          "executable": false
+        },
+        {
+          "path": "references/protocols.md",
+          "sha256": "5094e3f5efaa77b8891be32d389517293f7e768e98423f554a573e23353458ac",
+          "bytes": 6524,
+          "executable": false
+        },
+        {
+          "path": "references/reliability.md",
+          "sha256": "8e5e30d5e590237d072d966b8d6bfbd4b37a7a98ef4d346a98316f47634fb213",
+          "bytes": 8504,
+          "executable": false
+        },
+        {
+          "path": "references/security.md",
+          "sha256": "8f6e79b2d7d4b62f095b9f4157697ffc131860348c33217acce9013744c82b58",
+          "bytes": 6677,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "1782b464dd6784ea527b73acaaeaab9314d4bd3756a5093de581e18ebfce45de",
+          "bytes": 9069,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "f8ad117bb0d6f62b5c43657d1209b1ebcbb31338d94d94ba19f49f0572d4dd99",
+          "bytes": 6220,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "deep-readonly-system-audit",
+      "source": "user-skills/deep-readonly-system-audit",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "3873fda88b115a73023242e561542d40819c72fb1f78149221f9e54621ad5d9b",
+          "bytes": 133,
+          "executable": false
+        },
+        {
+          "path": "references/evidence-and-report.md",
+          "sha256": "75159f0cc2fc232d8e19efe75b84ef7c6ad40b3ec1067921cab3d55c41fff11f",
+          "bytes": 5473,
+          "executable": false
+        },
+        {
+          "path": "references/safe-investigation.md",
+          "sha256": "35d3f48bacd10ee5e756b972439470b8642f5260dcf41335801d36c78bcd7658",
+          "bytes": 5559,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "477225a9f0cf2f495e6068300fceb0809da97f8431d7e5cd37bfdad6f4297a7e",
+          "bytes": 3360,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "c2aa0c0e36882f823fbc8df002e40056aacc30f717b2090a7916c5b4f4a3c55b",
+          "bytes": 4911,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "distributed-systems-reliability",
+      "source": "user-skills/distributed-systems-reliability",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "67a0cf8ef52d890a400aabc4a518f11747f15cde29fe94192264a5113bb03b04",
+          "bytes": 141,
+          "executable": false
+        },
+        {
+          "path": "references/atomicity-and-concurrency.md",
+          "sha256": "fc3b9e41ab6168f4da2fe96f46c416a0e8df93e3c2c24e27676763327e90c2f6",
+          "bytes": 4515,
+          "executable": false
+        },
+        {
+          "path": "references/delivery-and-contracts.md",
+          "sha256": "9674b4d0e61a79719be287eb4e37309bd1da3a6ff6ef645bb55c60cfe47b7129",
+          "bytes": 5060,
+          "executable": false
+        },
+        {
+          "path": "references/recovery-and-operations.md",
+          "sha256": "fdb718f9ee44e210193277aae9014842d007c2d0911c25ee2c37bbf25a5cd6f4",
+          "bytes": 5103,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "9afb671b3c112975dbdd980fece168c9fe64fab59243156141296c4225fd1bd4",
+          "bytes": 3581,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "c3a19712a733c5bd63bd0c851665f1de3c4a1310171aa82db433a43b315aa54e",
+          "bytes": 4329,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "engineering-research-intelligence",
+      "source": "user-skills/engineering-research-intelligence",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "4f070298dfc5933db64932fc0ecb0a31769d28f2c32199e1d4f677d19fa70bb7",
+          "bytes": 147,
+          "executable": false
+        },
+        {
+          "path": "references/agents-and-retrieval.md",
+          "sha256": "048687691f50b6fcc4162d47c6ceaa4a76282bc6d2c7bb4739174822a559b9d3",
+          "bytes": 6268,
+          "executable": false
+        },
+        {
+          "path": "references/data-and-distributed.md",
+          "sha256": "a5c84b2ed0108076af144e9ef881141b8c2d070ee384acc6c565053c64fc2030",
+          "bytes": 4932,
+          "executable": false
+        },
+        {
+          "path": "references/evidence-policy.md",
+          "sha256": "f7cfd516e41511df5f5c99517288566a2af58f64c183793ac1c8853e8a899c66",
+          "bytes": 4860,
+          "executable": false
+        },
+        {
+          "path": "references/go-and-mobile.md",
+          "sha256": "110930353c5fbf7b1dd2fdfccd6b2925e4495e2a5a41655c47270fe451408a04",
+          "bytes": 3666,
+          "executable": false
+        },
+        {
+          "path": "references/languages-and-web.md",
+          "sha256": "d7a2f612e044a38782fae8b0e64f9fa9fcf5f7d3be3906232a79ea7502df6cdd",
+          "bytes": 4286,
+          "executable": false
+        },
+        {
+          "path": "references/production-evidence.md",
+          "sha256": "0eb81be83250bad84862568535f794de2b7c3e71af3f85278250bb4799bdf41a",
+          "bytes": 4439,
+          "executable": false
+        },
+        {
+          "path": "references/repository-study.md",
+          "sha256": "b64f06267026a85adf4faa91f8c184446af3a173042ed229a311c0a7a3fb7e4f",
+          "bytes": 4246,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "57d007e5b1ed75513da2564a12a72c3905d08efb2251753807a438def87eb84d",
+          "bytes": 5717,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "flutter-app-engineering",
+      "source": "user-skills/flutter-app-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "11b930eaf0226e3b6e0a191cbdb4d3443e78ec4a634a6d9776d43a65d54eeb70",
+          "bytes": 129,
+          "executable": false
+        },
+        {
+          "path": "references/architecture-lifecycle.md",
+          "sha256": "ebce14bb31855c3393a767d1052dd9d35ad654ad88073d66e6cd5a03a4863f72",
+          "bytes": 4802,
+          "executable": false
+        },
+        {
+          "path": "references/data-offline.md",
+          "sha256": "956e70cbc944ad48d147ecc79f4057df5af48cfef8374d86797c63b8aeb92266",
+          "bytes": 5736,
+          "executable": false
+        },
+        {
+          "path": "references/navigation-security.md",
+          "sha256": "1c748450428d4fc2c4f9fa627aed72448d936b263b058acf08206e54f04d73c1",
+          "bytes": 5317,
+          "executable": false
+        },
+        {
+          "path": "references/performance.md",
+          "sha256": "f8e9f307b8558781949ef548199a6090db9e2a4353d15f2df3a016f3677b7c05",
+          "bytes": 4350,
+          "executable": false
+        },
+        {
+          "path": "references/platforms-events.md",
+          "sha256": "524fa1a1b4ba0863212ba15df78acca1b68ca1d8581a1d43a3925d01070fad0f",
+          "bytes": 5277,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "07a58193e4405c87efb7c738cd62755e5ad77307e86b0988ccff318653478bcd",
+          "bytes": 11913,
+          "executable": false
+        },
+        {
+          "path": "references/ux-accessibility.md",
+          "sha256": "0c799b736b8366758e56978da900638a2ae2fde5f1030e592e1eaa127c135d73",
+          "bytes": 5450,
+          "executable": false
+        },
+        {
+          "path": "references/verification-release.md",
+          "sha256": "b47baa0a1c5106bb79f99e046751b93c02288114669fa6411dac8e3b220fb8b9",
+          "bytes": 5810,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "139dc81d2b864e13f72a9fcff8e079c3e9d277a7bdc313571b0014aeba18dc77",
+          "bytes": 5807,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "go-backend-engineering",
+      "source": "user-skills/go-backend-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "739379973a3c457b8bb2d4f763f92459d520954c8ea216bea9fdd55c782b2ca3",
+          "bytes": 128,
+          "executable": false
+        },
+        {
+          "path": "references/concurrency-context.md",
+          "sha256": "7502ccf048c333e6327fa2a14c40f4a4d03e94aefebbd3c33f32fb9a02eb516a",
+          "bytes": 6073,
+          "executable": false
+        },
+        {
+          "path": "references/http-streams.md",
+          "sha256": "744bb288096595081314fa1d09253f126c43efa081f90b26e13b080609e6f3cb",
+          "bytes": 6057,
+          "executable": false
+        },
+        {
+          "path": "references/integrations-jobs.md",
+          "sha256": "f8def5c5353b1ad950ea0aa6036158e6860160d568d34a343195b7f65e7db692",
+          "bytes": 6290,
+          "executable": false
+        },
+        {
+          "path": "references/language-security.md",
+          "sha256": "928543a9520bd7465e36e97c3337a0816bd92e81666fca5de1c21e8a354af7d7",
+          "bytes": 6051,
+          "executable": false
+        },
+        {
+          "path": "references/lifecycle-verification.md",
+          "sha256": "bce1b846f1a08dd9bdd37520816bc536548980449af792aed58a2e9d5221db91",
+          "bytes": 6960,
+          "executable": false
+        },
+        {
+          "path": "references/runtime-performance.md",
+          "sha256": "7964e9e82babb15de17e06d65af61b8396573ade18838a801875d1d8906a9e6c",
+          "bytes": 5077,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "54291c39c64bebb30f555803196e7d247d3de8e5c4cb93a4dd3cf3237f1969f6",
+          "bytes": 10080,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "3643cc931de5869e78501c92627852c620b6de5c1dda68d579ba5bf4222221da",
+          "bytes": 5387,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "multi-tenant-access-control",
+      "source": "user-skills/multi-tenant-access-control",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "24b23df2054173f26d290a8d10917d56b30a43f0d7c7f51f8aff1149dd119313",
+          "bytes": 137,
+          "executable": false
+        },
+        {
+          "path": "references/enforcement-and-data.md",
+          "sha256": "d01592340e48cb9558a746ce4bac574a6b249c72bef4521d1838819fd88034f3",
+          "bytes": 4547,
+          "executable": false
+        },
+        {
+          "path": "references/freshness-and-administration.md",
+          "sha256": "ddafe4954001c7b0f267fbc26c77acbdd376a31c1e446c5be47779dc5af597bc",
+          "bytes": 4881,
+          "executable": false
+        },
+        {
+          "path": "references/policy-and-identity.md",
+          "sha256": "73db2303efc175cff4155e0cf230a124868a9edeec413d56c8e092b712418c39",
+          "bytes": 4262,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "70d82bb517351259b2a28696a59779cc563b1ffe1ebeef3ed3c596e9b5fa0666",
+          "bytes": 3527,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "160d047115613930d1abc42e4cab8fb381e21afe4b5b64decc9d4951d24f93d2",
+          "bytes": 4630,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "nextjs-fullstack-engineering",
+      "source": "user-skills/nextjs-fullstack-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "87f9c04c3af2ae5c1e88f7793700627fb7ee86f97b83f1529458421aea7fc14a",
+          "bytes": 135,
+          "executable": false
+        },
+        {
+          "path": "references/data-caching.md",
+          "sha256": "b0890b57367ad0dae346062d357bf840b6db89bdc6bd8eb7dd9550d28e9ec68d",
+          "bytes": 6705,
+          "executable": false
+        },
+        {
+          "path": "references/navigation-ux.md",
+          "sha256": "ce5136dec77a64ced9792c8d65f0ff1eda0d103a6fb565ebb1fb2f9ab350e42e",
+          "bytes": 5988,
+          "executable": false
+        },
+        {
+          "path": "references/production-verification.md",
+          "sha256": "c6389cb07fb317c51f51e99a326808566cb1f11eb8a0959e3df5127a856de09c",
+          "bytes": 6464,
+          "executable": false
+        },
+        {
+          "path": "references/public-performance.md",
+          "sha256": "5fef47e206d98da8497e9ce8823b88c96484dcb7b89cf34daa0a5b1aa45f385e",
+          "bytes": 5797,
+          "executable": false
+        },
+        {
+          "path": "references/rendering-structure.md",
+          "sha256": "51b602ee5526c71b03ac1830c1adc33d73d259315b0e151e7654d64d4a2f84d4",
+          "bytes": 5358,
+          "executable": false
+        },
+        {
+          "path": "references/security-mutations.md",
+          "sha256": "72f04338813663776ef039a2632530753ca4891e98f751a2932f5aa7e51119ce",
+          "bytes": 6061,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "c66b93162b8df3a2b2c74fa31af72b5d93465102940e688bfb5df741dd7cfc3b",
+          "bytes": 12077,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "4d68d815387f79386f792cec28f1997bf9dc7ecb25b7b458142bffc5fb1ea62e",
+          "bytes": 5633,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "nodejs-backend-engineering",
+      "source": "user-skills/nodejs-backend-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "c26843ee0057413227081d680a1d90000b3577c2020000e6c615636e459269ea",
+          "bytes": 131,
+          "executable": false
+        },
+        {
+          "path": "references/http-streams.md",
+          "sha256": "a5910f75ec6070fb38c500455fb255fe26fc59b568ed52130bf4f00a4cd629bc",
+          "bytes": 5705,
+          "executable": false
+        },
+        {
+          "path": "references/integrations-jobs.md",
+          "sha256": "0a47a0147c91befab501523d2d243d45e5fc3e6ebd66eb30349f5f521eaeab8b",
+          "bytes": 6178,
+          "executable": false
+        },
+        {
+          "path": "references/language-security.md",
+          "sha256": "99414e2fa3a73be4d08559b256e5481ab155b127f533a9e76b75b1cca93c505c",
+          "bytes": 6146,
+          "executable": false
+        },
+        {
+          "path": "references/lifecycle-diagnostics.md",
+          "sha256": "cae209edcf4fa18829dd00a071ea67de97594493f38edb4ce276219e7396021c",
+          "bytes": 6931,
+          "executable": false
+        },
+        {
+          "path": "references/runtime-concurrency.md",
+          "sha256": "57badbbd62c370c922d0d4262949ebd5fb21f09e288f83e644d5f1a8eb9e96a3",
+          "bytes": 5506,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "75a47228b0ce33f946b2953979c7c124ed804a2bf018d155ce5dea1ebe4eacbc",
+          "bytes": 9337,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "7092ba892136e574851e8f51843c25f06c45fed6c8ef8e4bbaa4673fd4495539",
+          "bytes": 5528,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "postgresql-data-engineering",
+      "source": "user-skills/postgresql-data-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "19529fa438d68ad444be173b88c379a0a7b03da1988e905e10e33d0f55af9d99",
+          "bytes": 132,
+          "executable": false
+        },
+        {
+          "path": "references/migrations.md",
+          "sha256": "944e4ccb0134525ba506ddf4483dcd9f735960e08da1f54f3725f63d6233e61b",
+          "bytes": 6228,
+          "executable": false
+        },
+        {
+          "path": "references/operations-recovery.md",
+          "sha256": "006b9e83a56a49cee0684a559bcff4621479e3bd0e09b94216e5fa0394fc84f8",
+          "bytes": 8823,
+          "executable": false
+        },
+        {
+          "path": "references/queries-indexes.md",
+          "sha256": "f1e6d78b9944ba9e112f79d408649885ae26e5d102862304a0978fe8152c437e",
+          "bytes": 6792,
+          "executable": false
+        },
+        {
+          "path": "references/schema-security.md",
+          "sha256": "3d8214790482bbe17c4711cf8e436fc380999ff4be318a57d89abf1d1efd6dd9",
+          "bytes": 7032,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "6c69ac422e3e1330b5cf6c253580bbf11181aa89e3aa4bc03afb1bb1580d388e",
+          "bytes": 9123,
+          "executable": false
+        },
+        {
+          "path": "references/transactions-connections.md",
+          "sha256": "68891b5d254e20a970bc35f69a4dd2e1e1974f890adcebf39453ed50a4ae1f09",
+          "bytes": 7218,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "1496eb82ae94542c516924d285204799d355b9f124af59c9ded5472b350e349f",
+          "bytes": 6028,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "react-vite-dashboard-engineering",
+      "source": "user-skills/react-vite-dashboard-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "ceb6a01345fc027daeb19ab428a54ca698aa437bdfd7f545bbe022ed7dd16241",
+          "bytes": 137,
+          "executable": false
+        },
+        {
+          "path": "references/architecture.md",
+          "sha256": "83b1d1349752d67abcf74f9200e82d7b413d4acfd52e4f26537504c5d4f09d60",
+          "bytes": 8185,
+          "executable": false
+        },
+        {
+          "path": "references/auth-routing.md",
+          "sha256": "ffb703c7231afc17cb5494337bfcb25f22cdce7cf65e1622ce3415f9ddb4689f",
+          "bytes": 6945,
+          "executable": false
+        },
+        {
+          "path": "references/data.md",
+          "sha256": "1df6f3fdde883d042c0353d86e78ff91388ebf5abbeb6eb845d08b09f4c5536f",
+          "bytes": 7656,
+          "executable": false
+        },
+        {
+          "path": "references/experience.md",
+          "sha256": "28fb7c793774f0427059465233c03e7ed542e8ac9d264c9c6904538edd894f5a",
+          "bytes": 7968,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "cb90eb0e8e2274e183b3641934a06e7ff17ba3e61cd456e556b82c9cf294397e",
+          "bytes": 9562,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "94bb490a832baa4ab808bf085f27820494afbffa3aa17c197441a148ba414e84",
+          "bytes": 5617,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "real-world-test-engineering",
+      "source": "user-skills/real-world-test-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "1874bc8a68add673b9175f542fca19d42981f2d2299f8477924417b29a873df6",
+          "bytes": 135,
+          "executable": false
+        },
+        {
+          "path": "references/flutter-and-dart.md",
+          "sha256": "a17ed0ae1a34a2985a271d2b4cf19730b8ca895df0debbf132da8e28cd3b8bfe",
+          "bytes": 3490,
+          "executable": false
+        },
+        {
+          "path": "references/go.md",
+          "sha256": "9366843e2c97c75f7c0c0bbe3b14825be106d79bd7b15e479c321cd065bb9f7f",
+          "bytes": 3397,
+          "executable": false
+        },
+        {
+          "path": "references/javascript-and-web.md",
+          "sha256": "e6a65e2c9d078cc9b976fef7942b5ac871f2578ace1f7bbe2a911f346e4903d9",
+          "bytes": 5370,
+          "executable": false
+        },
+        {
+          "path": "references/python.md",
+          "sha256": "a33d80bcaf6241401c34c2634f5b39cc83b71f9ca9ceb43ab11a07f226b949ef",
+          "bytes": 3552,
+          "executable": false
+        },
+        {
+          "path": "references/reproducible-integration.md",
+          "sha256": "8fb82f1c65aa7bea010c206cc023115dcfd5f55a3ee5b2bd6e210d13f0035d28",
+          "bytes": 6936,
+          "executable": false
+        },
+        {
+          "path": "references/scenarios-and-oracles.md",
+          "sha256": "98986081e2ec81dd963f718151b62bdf04078f553cec593bb8f8205a83d67df8",
+          "bytes": 6858,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "f9f456cdb4993e3c62f3e01fbfae4565693d3b40b34d8d323cfd451aca9390aa",
+          "bytes": 5402,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "84094d921a1d2ab1f73bee56146e8a3ad121598708e560d50fa8ef46d68a2e04",
+          "bytes": 5700,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "redis-production-engineering",
+      "source": "user-skills/redis-production-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "93d01458cbbc5261f1cc9b174f4d3e0ed61bb7b498f2306e926b5c3307e9e8f6",
+          "bytes": 132,
+          "executable": false
+        },
+        {
+          "path": "references/atomicity-and-rate-limiting.md",
+          "sha256": "053765bbbaad3f055e65b595020fa60f1fede882426bc3aebc1a8bf551276810",
+          "bytes": 5766,
+          "executable": false
+        },
+        {
+          "path": "references/caching-and-freshness.md",
+          "sha256": "ca0da08b8c91fbf71dc563c1cc282952d19dfce281849cfe14a5403ea4384158",
+          "bytes": 5522,
+          "executable": false
+        },
+        {
+          "path": "references/capabilities-and-compatibility.md",
+          "sha256": "7c2c2972dd55eb4d69b012df2a0ef6404abed7a957d07233efe4f5493c6767f2",
+          "bytes": 5622,
+          "executable": false
+        },
+        {
+          "path": "references/infrastructure-and-recovery.md",
+          "sha256": "af7eb6a17abbcfe86cfe0f39ad8d35c26826d074802f46a646688a8d90ec4c42",
+          "bytes": 7266,
+          "executable": false
+        },
+        {
+          "path": "references/messaging-and-processing.md",
+          "sha256": "40d189ce53352ab9c206849fe2c34d779c34208c0cc51fbc69da73090bdb6d4b",
+          "bytes": 5823,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "c2783a8e7439cf9cab14f73177e2d4e2466f17891129114333875681eb8f5ec2",
+          "bytes": 5833,
+          "executable": false
+        },
+        {
+          "path": "references/tenancy-and-clients.md",
+          "sha256": "d2d44c5ac83b0806f9a723234e40d60df3f67c1db00268ffe0acb63d448014d7",
+          "bytes": 6063,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "560a8cba6b8378deca300326f615ef1eb303fa7ccdc7f8e881cf8ba18d7d2a75",
+          "bytes": 5231,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "repository-structure-engineering",
+      "source": "user-skills/repository-structure-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "d4a82c596c7f88beea44582410d305c23ca3d4d435f373edf4acfee49187001f",
+          "bytes": 141,
+          "executable": false
+        },
+        {
+          "path": "references/dart-flutter.md",
+          "sha256": "ac08977521bd66e90297d38584bfe4836307ad457f72bc3d2da115224e777e12",
+          "bytes": 4297,
+          "executable": false
+        },
+        {
+          "path": "references/go.md",
+          "sha256": "90b5d2e9b0fd8dfb9a7aaffbbb0528e6d44d956c934fddfaeb8da0af129ecbe0",
+          "bytes": 4064,
+          "executable": false
+        },
+        {
+          "path": "references/javascript-node.md",
+          "sha256": "a9e34c035940488d8a3e4d3d5e0544df5fdf137421697cacb59388978920c023",
+          "bytes": 4868,
+          "executable": false
+        },
+        {
+          "path": "references/ownership-and-placement.md",
+          "sha256": "8cce4f8dbeb987f66544d31a4dfd8a79d72b93c91efdc87f7edd2bb8b21403f0",
+          "bytes": 5760,
+          "executable": false
+        },
+        {
+          "path": "references/polyglot-workspaces.md",
+          "sha256": "2262caa2a9ef1be2af91c97f035cc03a8227546ff21ee95404b8445ed83dd1ed",
+          "bytes": 5197,
+          "executable": false
+        },
+        {
+          "path": "references/safe-restructuring.md",
+          "sha256": "4e5370e69d7bdae98f15897b8c5675121273abeb24a522a60d3939dd56db0acb",
+          "bytes": 5979,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "c080480ea812fb8b2e9e5c3459cb0f1cbe32be61bc83b63debef04542740d516",
+          "bytes": 8667,
+          "executable": false
+        },
+        {
+          "path": "references/web-frameworks.md",
+          "sha256": "119015754ad8c014172136cb2046e5cdcb24d595499ebe3a4473a39a7f4f5901",
+          "bytes": 4599,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "b705746c171be4a1f63b7cf829fb2e80c029b876b4c77df7924a5b983e1bccd5",
+          "bytes": 5313,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "saas-security-engineering",
+      "source": "user-skills/saas-security-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "33d7810c54ae1dcdebc4e4be4d5cc8c005a7f5400d7d5077b8ad271add58a951",
+          "bytes": 136,
+          "executable": false
+        },
+        {
+          "path": "references/identity-and-sessions.md",
+          "sha256": "a6e4625d8b204d4ce5b06db1ebff0e53f09d30e26141043a4a24eafb50d37d6d",
+          "bytes": 4377,
+          "executable": false
+        },
+        {
+          "path": "references/operations-and-verification.md",
+          "sha256": "9ef8d871be412e5f9bb83f2c2fc5227af0f411da7e780a6085987792db83ccd7",
+          "bytes": 4609,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "7f33e35d2eddcc2780e5f9f8fdfdca07343d1372d4869285056ddfbf490d74e7",
+          "bytes": 3985,
+          "executable": false
+        },
+        {
+          "path": "references/untrusted-boundaries.md",
+          "sha256": "95c2fbf770fec20004f763e567ce6fa70a519a519401138a8dfa3dc32e485767",
+          "bytes": 4412,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "56fe53b412e65e2cf78a921b84f3fa273efbb493ed4428e50010b829dc001e88",
+          "bytes": 4410,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "task-subagent-orchestration",
+      "source": "user-skills/task-subagent-orchestration",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "34a8c7150ae052bf94edbde90f9d0a6522dc1a9105149c15f588335693627df5",
+          "bytes": 140,
+          "executable": false
+        },
+        {
+          "path": "references/delegation-and-integration.md",
+          "sha256": "3990e8119aa0dab8f99941514a8c6cffd299e12ebdac4ced80531d5a786a4dbf",
+          "bytes": 5705,
+          "executable": false
+        },
+        {
+          "path": "references/planning-and-skills.md",
+          "sha256": "6aeea2895460694bea29191331e0a319c90c20818d0cca0860006c0c38828ded",
+          "bytes": 4744,
+          "executable": false
+        },
+        {
+          "path": "references/reporting-and-audits.md",
+          "sha256": "d293021fa4aec0b76a2bb9234d5b0b0c7472793c875653c40e950b757f3de003",
+          "bytes": 4783,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "96bd9ec6ba86114aeae7c548f8507501fb70c59f8acd5fe95d99977f310363d9",
+          "bytes": 3875,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "c1b4a5b16120534c48deea222040c78e9426b48c32838eab3ee2f8295381ca5f",
+          "bytes": 5659,
+          "executable": false
+        }
+      ]
+    },
+    {
+      "name": "universal-database-engineering",
+      "source": "user-skills/universal-database-engineering",
+      "files": [
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "04c649ef9e7a6924785551b7c1ce2e947d0c8960293d567b17d950d10b24d6ab",
+          "bytes": 132,
+          "executable": false
+        },
+        {
+          "path": "references/clickhouse.md",
+          "sha256": "9797644e0ae9282a66e2ebabb108c489f489194e48c59d4818a25f2f7a21e600",
+          "bytes": 4727,
+          "executable": false
+        },
+        {
+          "path": "references/integrity-workload-and-evolution.md",
+          "sha256": "fcfa861ed5a0e753f6dbc13de746b06fa95c6da9fae1f1d8a170d04b635b2678",
+          "bytes": 7271,
+          "executable": false
+        },
+        {
+          "path": "references/modeling-decisions.md",
+          "sha256": "9ec59ccfdda86645cf1b842a2dd37891493a08873f6afca6db7d71d06543bb95",
+          "bytes": 7259,
+          "executable": false
+        },
+        {
+          "path": "references/mongodb.md",
+          "sha256": "eccc97094d42ee82bcc4393ecef8b4759620a232c552ac37d749fb0481dc99bc",
+          "bytes": 5035,
+          "executable": false
+        },
+        {
+          "path": "references/mysql-and-mariadb.md",
+          "sha256": "07a6dcd1506a596ccb787128c1dade74967ed19f159f4d6ed5e40ffc112c3d1f",
+          "bytes": 5397,
+          "executable": false
+        },
+        {
+          "path": "references/sources.md",
+          "sha256": "5ac6883dddfc2388d9f7a95aa4b4bc6e5e88077ce21205aa61e408413799ccdb",
+          "bytes": 6112,
+          "executable": false
+        },
+        {
+          "path": "references/sqlite.md",
+          "sha256": "18178dbc50ea125829ee669a9e0ec756591e594c9237cbb37ea5b7097b6f5ee8",
+          "bytes": 4546,
+          "executable": false
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "f3c6edf6235ee35b83c39367c6dbf992fe59cbd1b53fb5e71efa890f3bdbafa7",
+          "bytes": 5483,
+          "executable": false
+        }
+      ]
+    }
+  ]
+}

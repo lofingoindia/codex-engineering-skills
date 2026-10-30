@@ -1,0 +1,5 @@
+* text=auto eol=lf
+
+# Preserve imported skill source bytes, including existing line endings.
+skills/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+evals/fixtures/** -text whitespace=trailing-space,space-before-tab,cr-at-eol

@@ -1,0 +1,35 @@
+# Schema, integrity, and security
+
+Start from entities, relationships, business invariants and access paths. Preserve a sound relational design. Denormalize selectively when measured read cost justifies the synchronization/repair burden, with an identified source of truth; JSONB and extra tables are not competing universal defaults.
+
+## Modeling decisions that affect correctness
+
+Choose identifiers for generation/coordination, index locality, exposure and interoperability. Identity sequences and UUIDs both have valid uses; neither is authorization and sequences need not be gapless. Check native generator/extension support before writing migrations: PostgreSQL 18 has `uuidv7()`, which is not an assumed function on older servers ([UUID functions](https://www.postgresql.org/docs/18/functions-uuid.html)).
+
+Use types that express the domain and survive the driver/client round trip. Use exact numeric arithmetic or a deliberate integer minor-unit model for money, with currency and bounds; floating point is not a substitute. Check bigint/numeric serialization rather than assuming a JavaScript number is exact. Prefer `timestamptz` for instants; it does not retain the original zone name. Preserve a zone identifier separately when recurring/local scheduling requires it, and use date/local types where the domain genuinely does ([date/time](https://www.postgresql.org/docs/18/datatype-datetime.html)).
+
+Define NULL, defaults, empty values, case/collation, and units explicitly. Store stable relational identity/relationships and frequently constrained/queryable attributes in suitable columns. JSONB fits flexible documents but moves some integrity and query/index responsibility into expressions and application code; it is not a reason to omit a schema for business-critical data. Evaluate enums, domains and lookup tables against expected evolution and tooling, rather than selecting one by taste.
+
+Enforce practical invariants at the shared database boundary as well as validating for user feedback. A CHECK succeeds for true or NULL; add NOT NULL when absence is invalid. Ordinary UNIQUE permits multiple NULLs; `NULLS NOT DISTINCT` is available from 15 when that is the intended rule. Foreign keys do not automatically create indexes on referencing columns. Cross-row rules do not belong in a CHECK that queries other rows; consider unique/exclusion constraints or transactional protection. Deferrable constraints help only when their timing matches the workflow ([constraints](https://www.postgresql.org/docs/18/ddl-constraints.html), [15 constraints](https://www.postgresql.org/docs/15/ddl-constraints.html)).
+
+Model deletion/retention deliberately: cascades can remove a large dependency graph; soft deletion affects uniqueness, joins, privacy, and every read path. A partial unique index can model active-only uniqueness but is not a universal replacement for a referenceable unique constraint. Identify archival/restore behavior and parent-child ownership before choosing referential actions.
+
+For shared-table tenancy, scope business keys and relationships. A child with tenant A must not reference tenant B's parent merely because a global parent ID exists. A suitable `(tenant_id, parent_id)` foreign key to a corresponding unique parent key can enforce the relationship; application filtering alone cannot. Test cross-tenant insert/update/reparent operations and tenant-scoped duplicate rules, including alternate worker/import paths.
+
+Partitioning needs an actual benefit such as retention lifecycle, pruning or maintenance isolation, with a useful partition key. Account for missing/new partitions, default partitions, index/constraint coverage, pruning, planning overhead and skew. Partitioned unique/primary-key constraints have partition-key restrictions; splitting a table does not magically create global uniqueness or increase write capacity ([partitioning](https://www.postgresql.org/docs/18/ddl-partitioning.html)).
+
+## Privileges and tenant enforcement
+
+Separate object ownership/migration access from ordinary application roles. Use least privilege for runtime, workers, reporting, backups and operations, including sequence, schema and function privileges. Parameterize values through the installed driver; identifiers/operators/order expressions require an allowlist and appropriate composition, not value placeholders or string interpolation. Verify network/TLS certificate validation and secret handling for the actual provider, not merely that encryption is enabled ([TLS](https://www.postgresql.org/docs/18/ssl-tcp.html)).
+
+RLS can add a strong row-filtering boundary when its role/context model is sound; it is not mandatory for every app. Inspect ENABLE/FORCE, table ownership, superuser/BYPASSRLS membership, command-specific USING/WITH CHECK behavior, policy combination, views and privileged functions. Owners normally bypass; FORCE can subject owners, but does not neutralize superusers/BYPASSRLS. Whole-table operations and integrity checks have different RLS behavior, with possible existence leaks ([row security](https://www.postgresql.org/docs/18/ddl-rowsecurity.html)).
+
+A custom tenant setting is an input to policy, not cryptographic proof of authority. If an untrusted caller can freely choose it or run arbitrary SQL as the shared role, understand what protection remains. Derive tenant membership from verified application identity and set context within the same owned transaction as protected work. Ensure absent/invalid context cannot default to broad access. Read [transactions/connections](transactions-connections.md) for pooling interactions; do not rely on a connection's previous session state.
+
+Test RLS as the actual nonprivileged runtime role, not only a table owner or test superuser. Exercise reads, writes, transfers/relationships, batch/import paths, missing context, denied access and connection reuse across tenants. Application permissions still govern actions and fields beyond row membership.
+
+## Functions, schemas, and bypass paths
+
+Inspect actual schema CREATE grants and `search_path`, especially upgraded databases; a schema is not a tenant security boundary just because objects have distinct names ([schemas](https://www.postgresql.org/docs/18/ddl-schemas.html)). Avoid SECURITY DEFINER unless the privilege boundary requires it. When required, constrain owner/EXECUTE privileges, use trusted schema resolution and appropriate qualification, and put `pg_temp` last in a safe search_path. New functions can grant EXECUTE to PUBLIC by default; set grants atomically with creation. Review dynamic SQL and caller-controlled inputs as privileged code ([function security](https://www.postgresql.org/docs/18/sql-createfunction.html)).
+
+Check views, export/reporting roles, maintenance jobs, replicas and backup paths as well as the main endpoint. Keep logs, query parameters, diagnostics and backups from exposing credentials or customer data. A successful permission check on one application path does not prove that all database access is isolated.

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Distributed Systems Reliability"
+  short_description: "Preserve correctness across services and durable work"

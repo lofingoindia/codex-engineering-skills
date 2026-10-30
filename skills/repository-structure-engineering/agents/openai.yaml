@@ -1,0 +1,3 @@
+interface:
+  display_name: "Repository Structure Engineering"
+  short_description: "Organize polyglot repositories with clear boundaries"

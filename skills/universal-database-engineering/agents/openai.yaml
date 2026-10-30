@@ -1,0 +1,3 @@
+interface:
+  display_name: "Universal Database Engineering"
+  short_description: "Model data and evolve database schemas safely"

@@ -1,0 +1,200 @@
+[
+  {
+    "id": "p01-small-design",
+    "trigger": true,
+    "mode": "review",
+    "prompt": "Use $api-design-engineering to design a notes API for a small same-origin web app. One Python monolith, SQLite, existing cookie sessions and CSRF middleware, about 80 users. Existing endpoints use camelCase JSON and {items, nextCursor} lists. Need create, edit and list my notes; no sharing or third-party access. Give the concrete contract and implementation outline, with the decisions that matter.",
+    "rubric": [
+      "Uses existing monolith/sessions and camelCase; no unjustified OAuth/gateway/service/queue",
+      "Concrete CRUD contract, own-note access, input limits and existing CSRF reuse",
+      "Bounded lists and explicit edit/failure behavior; assumptions distinguished"
+    ],
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "p02-invoice-edit",
+    "trigger": true,
+    "mode": "implementation",
+    "fixture": "invoice",
+    "prompt": "Fix the invoice-edit API in this fixture. Users report that knowing an invoice ID can let them edit someone else's invoice, protected fields can change, and two editors using the same ETag can both overwrite each other. Preserve existing title-edit clients and response conventions. Implement the smallest safe fix and focused tests; do not add dependencies. Follow PROJECT.md.",
+    "rubric": [
+      "Scopes tenant and owner/admin access with no unauthorized side effects",
+      "Only title writable; unknown fields stay ignored, protected fields unchanged, input validation preserved",
+      "Strong optional If-Match compares atomically; one winner under concurrent same-version edits; legacy omission still works",
+      "Existing envelopes and valid edit behavior retained; no unrelated infrastructure"
+    ],
+    "baseline": true,
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "p03-reservation",
+    "trigger": true,
+    "mode": "implementation",
+    "fixture": "reservation",
+    "prompt": "Use $api-design-engineering to stabilize the reservation API in this disposable fixture. After response loss clients retry; two application processes can receive the same request concurrently. Customers see duplicate reservations and negative stock. Keep the existing function signature and response envelope. Implement a focused fix using the existing SQLite store, and add meaningful regression tests. Follow PROJECT.md.",
+    "rubric": [
+      "Atomically persists deduplication and mutation; works across database connections/processes",
+      "Same key same payload replays; different payload rejects; scopes keys to tenant/operation",
+      "Atomic stock invariant and no effects after insufficient stock/invalid input",
+      "Lost response and concurrency tested; no new service/dependency/global config"
+    ],
+    "baseline": true,
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "p04-public-migration",
+    "trigger": true,
+    "mode": "review",
+    "prompt": "Review this proposed release for a public API used by mobile versions we cannot force-upgrade and generated Java/Kotlin clients. GET /orders currently returns a bare array of all orders, sorted by createdAt. Proposal: same path will return {items,nextCursor}, default to 100 records, sort by updatedAt, and add a new value 'paused' to the status enum. Existing errors are {code,message}. We also want Problem Details and OpenAPI 3.2.1, but the generator only accepts 3.0.3. Recommend a safe practical release approach.",
+    "rubric": [
+      "Recognizes envelope/truncation/sort/error and enum consumer compatibility",
+      "Preserves legacy behavior during explicit migration or opt-in; no silent truncation",
+      "Toolchain support governs OAS upgrade; no blindly mandatory new spec/version convention",
+      "Concrete coexistence/usage/retirement/recovery evidence"
+    ],
+    "baseline": true,
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "p05-graphql",
+    "trigger": true,
+    "mode": "review",
+    "prompt": "Review a multi-tenant GraphQL API. node(id) checks a logged-in user but looks up by global ID. A process-global DataLoader caches customer objects by customer ID, including fields filtered for the first caller. Admin fields are hidden from the normal UI. The HTTP gateway allows 60 requests/minute; each query may use arbitrary aliases and unbounded nested lists. Proposal: disable introspection to solve data leaks and overload. Give prioritized corrections while keeping developer clients usable.",
+    "rubric": [
+      "Object/function/field authorization independent of UI and introspection",
+      "Identity/tenant-safe cache and node lookup; no global permission-sensitive cache reuse",
+      "Cost/breadth/alias/list/concurrency controls, rate limit alone insufficient",
+      "No unjustified GraphQL rewrite or blanket introspection cure"
+    ],
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "p06-grpc",
+    "trigger": true,
+    "mode": "review",
+    "prompt": "We operate Go and Java gRPC services and a REST gateway with generated mobile clients. An inventory mutation has no explicit deadline. App code retries DEADLINE_EXCEEDED three times; the service mesh also retries. The team says the first request was cancelled so it cannot have committed. A proto change reuses removed field 7 for a new string; it compiles, so they call it backward compatible, including the REST JSON output. Review the release and suggest a proportionate repair.",
+    "rubric": [
+      "Timeout/cancel ambiguous for committed mutation; safe identity/reconciliation required",
+      "Explicit deadlines/propagation and coordinated bounded retries",
+      "No field-number reuse; reserve old names/numbers; wire/source/JSON compatibility differentiated",
+      "Focused changes with actual language/runtime checks"
+    ],
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "p07-webhook",
+    "trigger": true,
+    "mode": "review",
+    "prompt": "Review our payment webhook handler design. It JSON-parses the request, reserializes it, then verifies HMAC. It uses payload.metadata.tenantId to select an account, returns 200, and starts an in-memory task to credit the wallet. A dedup dictionary is local to each worker and is written after crediting. Events with timestamps <= lastTimestamp are ignored. Customers can also configure an HTTPS delivery URL for outgoing notifications; redirects are followed automatically. Explain the actual failure cases and a practical correction.",
+    "rubric": [
+      "Exact raw-byte/provider signature validation and verified account mapping",
+      "Durable acceptance; atomic dedup/effect; unordered/distinct event handling without timestamp-only loss",
+      "Lost ack/worker crash and outgoing retry/replay ownership addressed",
+      "SSRF includes redirects/DNS/address boundaries, no blanket URL regex cure"
+    ],
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "p08-cache",
+    "trigger": true,
+    "mode": "review",
+    "prompt": "An existing REST endpoint GET /reports/{id} authenticates and checks report ownership in the DB, then returns appCache[reportId] if present. On a miss, it computes a response filtered by the caller's role and caches it. Responses include Cache-Control: public,max-age=600. Tenant-scoped IDs may overlap. A CDN uses the URL as its cache key. Under load, p95 grows and the handler performs one detail query per line item. A proposed fix adds Vary: Authorization and Redis. Diagnose and choose the smallest safe improvement.",
+    "rubric": [
+      "Recognizes application and CDN isolation independently; Vary does not fix app cache",
+      "Permission-filtered role/principal/tenant data and revocation/freshness handled safely",
+      "Measures/fixes N+1/query/payload bottleneck before speculative Redis",
+      "No security-breaking stale fallback; verification covers cross-tenant cache hits"
+    ],
+    "baseline": true,
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "p09-async",
+    "trigger": true,
+    "mode": "review",
+    "prompt": "We are extending a SaaS export API in an existing PostgreSQL app with an existing worker. POST /exports writes an export row, commits, publishes a queue message, and returns 202. Sometimes publish fails after commit. The worker writes a result URL into the row; GET /exports/{id} only checks that someone is logged in. The download URL never expires. Export authorization calls an internal service; the proposed outage fallback is to allow the request. Design a focused reliability/security repair and the verification needed.",
+    "rubric": [
+      "Durable accepted work and dual-write recovery using existing store/worker",
+      "Tenant/owner authorization of submit/poll/download and scoped expiring access",
+      "Fail-closed authorization outage with useful explicit failure; legitimate export workflow retained",
+      "Worker retry/dedup/recovery/observable states with proportional scope"
+    ],
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "n10-css",
+    "trigger": false,
+    "mode": "review",
+    "prompt": "Give me CSS to center a 320px login card horizontally and vertically while keeping 16px padding on a small screen. No backend changes.",
+    "rubric": [
+      "Does not load api-design-engineering or API references"
+    ],
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "n11-db-index",
+    "trigger": false,
+    "mode": "review",
+    "prompt": "A standalone offline Python analysis script uses SQLite: SELECT * FROM samples WHERE batch_id = ? ORDER BY observed_at. This is not served through an API. Explain the appropriate composite index and one way to inspect its query plan. No API changes.",
+    "rubric": [
+      "Does not load api-design-engineering or API references"
+    ],
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "n12-helper",
+    "trigger": false,
+    "mode": "review",
+    "prompt": "Simplify this local pure helper without changing behavior: def square(x): return x * x. Just tell me whether any simplification is worthwhile.",
+    "rubric": [
+      "Does not load api-design-engineering or API references"
+    ],
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "n13-typo",
+    "trigger": false,
+    "mode": "review",
+    "prompt": "Correct only the typo in this documentation sentence: 'The API returns a sucessful response.' Return the corrected sentence.",
+    "rubric": [
+      "Does not load api-design-engineering or API references"
+    ],
+    "skill": "api-design-engineering"
+  },
+  {
+    "id": "pg01-review",
+    "skill": "postgresql-data-engineering",
+    "trigger": true,
+    "mode": "review",
+    "fixture": "postgresql-review",
+    "prompt": "Review the incident and proposal in PROJECT.md against schema.sql and customer.js. Preserve the existing schema and driver where suitable. Give prioritized findings, a minimal correction and meaningful verification in at most 500 words. Distinguish proposed tests from executed evidence.",
+    "rubric": [
+      "Same-connection transaction ownership",
+      "Concurrent get-or-create visibility and returned identity",
+      "Actual runtime role and tenant isolation across pooled connections",
+      "Version-specific pooler capabilities and evidence before changes"
+    ]
+  },
+  {
+    "id": "d01-api-discovery",
+    "skill": "api-design-engineering",
+    "trigger": true,
+    "mode": "discovery",
+    "prompt": "Use only the available-skills metadata already in your context. Do not call tools or read files. Return a JSON object for api-design-engineering containing available (boolean), path (string), and description (string). If absent use false and empty strings. This is only a metadata discovery check.",
+    "rubric": [
+      "Selected skill appears in supplied metadata with the correct name, path and description",
+      "No tools or files used; this does not establish appropriate implicit activation or engineering quality"
+    ]
+  },
+  {
+    "id": "d02-postgresql-discovery",
+    "skill": "postgresql-data-engineering",
+    "trigger": true,
+    "mode": "discovery",
+    "prompt": "Use only the available-skills metadata already in your context. Do not call tools or read files. Return a JSON object for postgresql-data-engineering containing available (boolean), path (string), and description (string). If absent use false and empty strings. This is only a metadata discovery check.",
+    "rubric": [
+      "Selected skill appears in supplied metadata with the correct name, path and description",
+      "No tools or files used; this does not establish appropriate implicit activation or engineering quality"
+    ]
+  }
+]

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Task and Subagent Orchestration"
+  short_description: "Plan engineering work and coordinate safe delegation"

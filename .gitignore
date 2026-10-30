@@ -1,0 +1,14 @@
+.venv/
+.tools/
+.runs/
+dist/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db

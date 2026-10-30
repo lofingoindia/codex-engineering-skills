@@ -1,0 +1,3 @@
+interface:
+  display_name: "Deep Read-Only System Audit"
+  short_description: "Audit system evidence without changing the target"
