@@ -16,7 +16,7 @@ Never move or reuse a published version tag. Correct a release with a new versio
 | Immutable source commit | Exact repository revision behind that tag. |
 | Per-skill Git tree SHA and canonical SHA-256 | Determine whether a complete individual package changed, including resources and file modes. |
 
-Skills CLI maintains its own installation tracking. The release manifest describes published source and artifacts; it does not replace, rewrite, or duplicate the CLI's installed lockfile. The CLI's tracked directory tree hash can be compared with `git_tree_sha`. A local edit may not appear in that tracked hash: the CLI does not hash installed changes before updating.
+Skills CLI maintains its own installation tracking. The release manifest describes published source and artifacts; it does not replace, rewrite, or duplicate the CLI's installed lockfile. When the CLI records a 40-character Git tree hash, compare it with `git_tree_sha`. Its clone fallback can record a 64-character source-folder digest using a different algorithm; that is not directly comparable with this manifest's canonical SHA-256. Use the manifest's per-file digests for byte verification across either acquisition path. A local edit may not appear in tracked source hashes: the CLI does not hash installed changes before updating.
 
 The Python content identity is SHA-256 over the sorted file inventory encoded as compact, key-sorted UTF-8 JSON. Each file entry includes relative path, Git mode, byte count, and SHA-256. Timestamps and absolute checkout paths are excluded. See the script's docstring and tests for the schema. Archive hashes can differ after repackaging because ZIP metadata is separate; the package content identity remains stable.
 
